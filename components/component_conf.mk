@@ -13,5 +13,6 @@ IOT_COMPONENT_DIRS += $(IOT_SOLUTION_PATH)/components/i2c_devices/sensor
 IOT_COMPONENT_DIRS += $(IOT_SOLUTION_PATH)/components/i2c_devices/others
 IOT_COMPONENT_DIRS += $(IOT_SOLUTION_PATH)/components/network
 IOT_COMPONENT_DIRS += $(IOT_SOLUTION_PATH)/components/platforms
+IOT_COMPONENT_DIRS += $(IOT_SOLUTION_PATH)/components/hmi
 
 EXTRA_COMPONENT_DIRS += $(IOT_COMPONENT_DIRS)
