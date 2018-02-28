@@ -17,6 +17,7 @@
 
 CXpt2046::CXpt2046(xpt_conf_t * xpt_conf, int w, int h, float xfactor, float yfactor, int xoffset, int yoffset)
 {
+    _spi_mux = xSemaphoreCreateMutex();
     iot_xpt2046_init(xpt_conf, &m_spi);
     m_pressed = false;
     m_rotation = 0;
@@ -31,7 +32,7 @@ CXpt2046::CXpt2046(xpt_conf_t * xpt_conf, int w, int h, float xfactor, float yfa
 
 bool CXpt2046::is_pressed()
 {
-    return m_pressed;
+    return (get_irq() == 0);
 }
 
 int CXpt2046::get_irq()
@@ -41,7 +42,10 @@ int CXpt2046::get_irq()
 
 int CXpt2046::get_sample(uint8_t command)
 {
-    return iot_xpt2046_readdata(m_spi, command, 1);
+    xSemaphoreTake(_spi_mux, portMAX_DELAY);
+    int res = iot_xpt2046_readdata(m_spi, command, 1);
+    xSemaphoreGive(_spi_mux);
+    return res;
 }
 
 void CXpt2046::sample()
@@ -171,7 +175,7 @@ void CXpt2046::calibration()
     //left-top
     do {
         sample();
-    } while (!is_pressed());
+    } while (!m_pressed);
 
     xPot[0] = getposition().x;
     yPot[0] = getposition().y;
@@ -179,7 +183,7 @@ void CXpt2046::calibration()
     //right-top
     do {
         sample();
-    } while (!is_pressed());
+    } while (!m_pressed);
 
     xPot[1] = getposition().x;
     yPot[1] = getposition().y;
@@ -187,7 +191,7 @@ void CXpt2046::calibration()
     //right-bottom
     do {
         sample();
-    } while (!is_pressed());
+    } while (!m_pressed);
 
     xPot[2] = getposition().x;
     yPot[2] = getposition().y;
@@ -195,7 +199,7 @@ void CXpt2046::calibration()
     //left-bottom
     do {
         sample();
-    } while (!is_pressed());
+    } while (!m_pressed);
     xPot[3] = getposition().x;
     yPot[3] = getposition().y;
 

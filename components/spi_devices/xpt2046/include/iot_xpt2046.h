@@ -47,7 +47,6 @@ typedef struct {
 #ifdef __cplusplus
 class CXpt2046
 {
-
 private:
     spi_device_handle_t m_spi = NULL;
     position m_pos;
@@ -60,7 +59,7 @@ private:
     int m_width;
     int m_height;
     int m_io_irq;
-
+    SemaphoreHandle_t _spi_mux = NULL;
 public:
     /**
      * @brief   constructor of CXpt2046

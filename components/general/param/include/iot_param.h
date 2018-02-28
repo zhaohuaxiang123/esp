@@ -13,8 +13,12 @@
 // limitations under the License.
 #ifndef _IOT_PARAM_H_
 #define _IOT_PARAM_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 /**
-  * @brief  save param to flash with protect
+  * @brief  save param to flash with protect, based on NVS flash APIs
   *
   * @param  namespace
   * @param  key different param should have different key
@@ -28,7 +32,7 @@
 esp_err_t iot_param_save(const char* namespace, const char* key, void* param, uint16_t len);
 
 /**
-  * @brief  read param from flash
+  * @brief  read param from flash, based on NVS flash APIs
   *
   * @param  namespace
   * @param  key different param should have different key
@@ -40,4 +44,19 @@ esp_err_t iot_param_save(const char* namespace, const char* key, void* param, ui
   */
 esp_err_t iot_param_load(const char* namespace, const char* key, void* dest);
 
+/**
+  * @brief  Erase param from flash, based on NVS flash APIs
+  *
+  * @param  namespace
+  * @param  key different param should have different key
+  *
+  * @return
+  *     - ESP_OK: succeed
+  *     - others: fail
+  */
+esp_err_t iot_param_erase(const char* namespace, const char* key);
+
+#ifdef __cpp
+}
+#endif
 #endif

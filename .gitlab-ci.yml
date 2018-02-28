@@ -38,6 +38,13 @@ build:
     - cd ../empty_project
     - make defconfig
     - make -j8
+    - cd ../gui/ugfx_combo_example
+    - make defconfig
+    - make -j8
+    - cd ../ugfx_tetris_example
+    - make defconfig
+    - make -j8
+    - cd ../
     - cd ../touch_pad_evb
     - make defconfig
     - make -j8

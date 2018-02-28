@@ -61,7 +61,7 @@
 #define COLOR_FUCHSIA     0xF81F
 #define COLOR_ESP_BKGD    0xD185
 
-#define MAKEWORD(b1, b2, b3, b4) (uint32_t(b1) | ((b2) << 8) | ((b3) << 16) | ((b4) << 24))
+#define MAKEWORD(b1, b2, b3, b4) ((uint32_t) ((b1) | ((b2) << 8) | ((b3) << 16) | ((b4) << 24)))
 
 
 typedef enum {
@@ -120,17 +120,19 @@ private:
     SemaphoreHandle_t spi_mux;
     gpio_num_t cmd_io = GPIO_NUM_MAX;
     lcd_dc_t dc;
-
+//protected:
+public:
     /*Below are the functions which actually send data, defined in spi_ili.c*/
     void transmitCmdData(uint8_t cmd, const uint8_t data, uint8_t numDataByte);
-    inline void transmitData(uint16_t data);
-    inline void transmitCmdData(uint8_t cmd, uint32_t data);
-    inline void transmitData(uint16_t data, int32_t repeats);
-    inline void transmitData(uint8_t* data, int length);
-    inline void transmitCmd(uint8_t cmd);
+    void transmitData(uint16_t data);
+    void transmitData(uint8_t data);
+    void transmitCmdData(uint8_t cmd, uint32_t data);
+    void transmitData(uint16_t data, int32_t repeats);
+    void transmitData(uint8_t* data, int length);
+    void transmitCmd(uint8_t cmd);
     void _fastSendBuf(const uint16_t* buf, int point_num, bool swap = true);
     void _fastSendRep(uint16_t val, int rep_num);
-public:
+//public:
     lcd_id_t id;
     CEspLcd(lcd_conf_t* lcd_conf, int height = LCD_TFTHEIGHT, int width = LCD_TFTWIDTH, bool dma_en = true, int dma_word_size = 1024, int dma_chan = 1);
     ~CEspLcd();
@@ -139,6 +141,9 @@ public:
      * @param lcd_conf LCD parameters
      */
     void setSpiBus(lcd_conf_t *lcd_conf);
+
+    void acquireBus();
+    void releaseBus();
 
     /**
      * @brief get LCD ID

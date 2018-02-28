@@ -697,6 +697,152 @@ menu "IoT Solution settings"
             #        "Select this one to enable JOYLINK component"    
         endmenu
         
+        menu "HMI components"
+            config UGFX_GUI_ENABLE
+                bool "uGFX GUI enable"
+                default n
+                help 
+                    "Select to enable uGFX driver component"
+            menu "uGFX settings"
+                depends on UGFX_GUI_ENABLE
+                config UGFX_PROJ_RESOURCE_PATH
+                string "UGFX RESOURCE FILE PATH UNDER PROJECT"
+                default resource/include
+                help
+                    Select UGFX resource file path under project, default is $(PROJECT_PATH)/source/include
+                    Usually the UGFX system would need some extra header file for custom resources
+                
+                    
+                config UGFX_USE_CUSTOM_DRIVER
+                    bool "UGFX USE CUSTOM DRIVER DEFINED BY USERS"
+                    default n
+                    help 
+                        Select to use your own LCD driver. Instead, the driver in ugfx_driver will be used.
+                        Sometimes the driver need to be modified or re-written, users can choose this option and 
+                        define their own driver in an independent component. 
+                
+                config UGFX_USE_CONFIGURED_OPTIONS
+                bool
+                default y if !UGFX_USE_CUSTOM_DRIVER
+                default y if UGFX_CUSTOM_DRIVER_KEEP_OPTIONS
+                default n                
+                
+                config UGFX_CUSTOM_DRIVER_KEEP_OPTIONS
+                bool "UGFX CUSTOM DRIVER KEEP THE SAME OPTIONS"
+                depends on UGFX_USE_CUSTOM_DRIVER
+                default y
+                help
+                    Sometimes the driver need to be modified or re-written, users can choose this option and 
+                    define their own driver in an independent component. 
+                    Select this to enable the same options as the default driver
+                    
+                config UGFX_CUSTOM_DRIVER_COMPONENT_NAME
+                    string "UGFX CUSTOM DRIVER COMPONENT NAME"
+                    depends on UGFX_USE_CUSTOM_DRIVER
+                    default "ugfx_custom_driver"
+                    help
+                        Sometimes the driver need to be modified or re-written, users can choose this option and 
+                        define their own driver in an independent component. 
+                        Set this path to the cumtom board driver under project path, 
+                        default path is $(PROJECT_PATH)/ugfx_custom_driver
+                         
+                choice UGFX_DRIVER_MODE
+                    depends on UGFX_USE_CONFIGURED_OPTIONS
+                    bool "Display driver mode"
+                    default UGFX_LCD_DRIVER_FRAMEBUFFER_MODE
+                    config UGFX_LCD_DRIVER_FRAMEBUFFER_MODE
+                        bool "Select uGFX driver framebuffer mode"
+                    config UGFX_LCD_DRIVER_API_MODE
+                        bool "Select uGFX driver API mode" 
+                endchoice
+                
+                menu "Screen Pin Configuration"
+                    depends on UGFX_USE_CONFIGURED_OPTIONS
+                    config UGFX_LCD_MISO_GPIO
+                        int "UT_LCD_MISO_GPIO"
+                        default "25"
+                    config UGFX_LCD_MOSI_GPIO
+                        int "UT_LCD_MOSI_GPIO"
+                        default "23"
+                    config UGFX_LCD_CLK_GPIO
+                        int "UT_LCD_CLK_GPIO"
+                        default "19"
+                    config UGFX_LCD_CS_GPIO
+                        int "UT_LCD_CS_GPIO"
+                        default "22"
+                    config UGFX_LCD_DC_GPIO
+                        int "UT_LCD_DC_GPIO"
+                        default "21"
+                    config UGFX_LCD_RESET_GPIO
+                        int "UT_LCD_RESET_GPIO"
+                        default "18"
+                    config UGFX_LCD_BL_GPIO
+                        int "UT_LCD_BL_GPIO"
+                        default "5"
+                endmenu
+                
+                menu "Touch Screen Pin Configuration"
+                    depends on UGFX_USE_CONFIGURED_OPTIONS
+                    depends on UGFX_DRIVER_TOUCH_SCREEN_ENABLE
+                    config UGFX_TOUCH_CS_GPIO
+                        int "UGFX_TOUCH_CS_GPIO"
+                        default "26"
+                    config UGFX_TOUCH_IRQ_GPIO
+                        int "UGFX_TOUCH_IRQ_GPIO"
+                        default "4"
+                endmenu
+                            
+                config UGFX_DRIVER_SCREEN_WIDTH
+                    depends on UGFX_USE_CONFIGURED_OPTIONS
+                    int "uGFX screen width (pixels)"
+                    range 0 5000
+                    default 320
+                    help
+                        "uGFX screen width (pixels)"
+                   
+                config UGFX_DRIVER_SCREEN_HEIGHT
+                    depends on UGFX_USE_CONFIGURED_OPTIONS
+                    int "uGFX screen height (pixels)"
+                    range 0 5000
+                    default 240
+                    help
+                        "uGFX screen height (pixels)"   
+                
+                config UGFX_DRIVER_AUTO_FLUSH_ENABLE
+                    depends on UGFX_LCD_DRIVER_FRAMEBUFFER_MODE
+                    bool "uGFX driver auto flush enable"
+                    depends on UGFX_LCD_DRIVER_FRAMEBUFFER_MODE
+                    default y
+                    help 
+                        "Select to enable uGFX screen auto flush for bufferframe mode"
+                        
+                config UGFX_DRIVER_AUTO_FLUSH_INTERVAL
+                    depends on UGFX_LCD_DRIVER_FRAMEBUFFER_MODE
+                    int "uGFX driver auto flush interval(ms)"
+                    range 0 500
+                    default 50
+                    help 
+                        "Select to set the minimum screen flush interval for bufferframe mode"
+                         
+                config UGFX_DRIVER_TOUCH_SCREEN_ENABLE
+                    depends on UGFX_USE_CONFIGURED_OPTIONS
+                    bool "UGFX TOUCH-SCREEN ENABLE"
+                    default y
+                    help 
+                        "Select to enable uGFX touch screen function(xpt2046)  
+                    choice UGFX_DRIVER_TOUCH_SCREEN
+                        bool "CHOOSE TOUCH SCREEN DRIVER"
+                        depends on UGFX_DRIVER_TOUCH_SCREEN_ENABLE
+                        config UGFX_DRIVER_TOUCH_XPT2046
+                        bool "XPT2046"
+                        default y
+                    endchoice
+                                     
+                                                                                           
+            endmenu
+        
+        endmenu
+        
         menu "WiFi abstract"
             config IOT_SMARTCONFIG_ABSTRACT_ENABLE
                 bool "SMARTCONFIG_ABSTRACT_ENABLE"

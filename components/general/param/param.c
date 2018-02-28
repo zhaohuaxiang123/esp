@@ -27,6 +27,25 @@
 
 static const char* TAG = "param";
 
+esp_err_t iot_param_erase(const char* namespace, const char* key)
+{
+    esp_err_t ret = ESP_ERR_INVALID_ARG;
+    PARAM_POINT_ASSERT(TAG, namespace, OPEN_FAIL);
+    PARAM_POINT_ASSERT(TAG, key, OPEN_FAIL);
+    nvs_handle my_handle;
+    ret = nvs_open(namespace, NVS_READWRITE, &my_handle);
+    PARAM_ERR_ASSERT(TAG, ret, OPEN_FAIL);
+    ret = nvs_erase_key(my_handle, key);
+    PARAM_ERR_ASSERT(TAG, ret, SAVE_FINISH);
+    ret = nvs_commit(my_handle);
+
+SAVE_FINISH:
+    nvs_close(my_handle);
+
+OPEN_FAIL:
+    return ret;
+}
+
 esp_err_t iot_param_save(const char* namespace, const char* key, void *param, uint16_t len)
 {
     esp_err_t ret = ESP_ERR_INVALID_ARG;

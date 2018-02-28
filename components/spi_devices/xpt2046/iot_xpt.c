@@ -30,8 +30,9 @@ void iot_xpt2046_init(xpt_conf_t * xpt_conf, spi_device_handle_t * spi)
     }
 
     //Initialize non-SPI GPIOs
-    gpio_pad_select_gpio(xpt_conf->pin_num_irq);
     gpio_set_direction(xpt_conf->pin_num_irq, GPIO_MODE_INPUT);
+    gpio_set_pull_mode(xpt_conf->pin_num_irq, GPIO_PULLUP_ONLY);
+    gpio_pad_select_gpio(xpt_conf->pin_num_irq);
 
     spi_device_interface_config_t devcfg = {
         .clock_speed_hz = xpt_conf->clk_freq,     //Clock out frequency

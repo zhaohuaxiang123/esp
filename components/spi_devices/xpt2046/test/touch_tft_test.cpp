@@ -29,16 +29,14 @@ QueueHandle_t queue_change = NULL, queue_draw_point = NULL;
 void get_coordinate(void *arg)
 {
     while (1) {
-        if (xpt->get_irq() == 0) {
+        if (xpt->is_pressed()) {
             xpt->sample();
-            if (xpt->is_pressed()) {
-                position pos;
-                pos.x = xpt->x();
-                pos.y = xpt->y();
-                xQueueSend(queue_change, &pos, 0);
-                xQueueSend(queue_draw_point, &pos, 0);
-                ESP_LOGI("XPT2046", "getSample x: %d ; y: %d", xpt->x(), xpt->y());
-            }
+            position pos;
+            pos.x = xpt->x();
+            pos.y = xpt->y();
+            xQueueSend(queue_change, &pos, 0);
+            xQueueSend(queue_draw_point, &pos, 0);
+            ESP_LOGI("XPT2046", "getSample x: %d ; y: %d", xpt->x(), xpt->y());
         } else {
             vTaskDelay(100 / portTICK_RATE_MS);
         }
