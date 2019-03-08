@@ -59,6 +59,14 @@
     - The example demonstrates how to use uGFX embedded GUI library on ESP32.
     - Keywords: __uGFX embedded GUI__
 
+* [ESP32 IR Learn Receive Example](examples/ir_learn/ir_learn_recv)
+    - The example demonstrates how to use IR learn module to receive IR message and send out identical.
+    - Keywords: __IR learn RMT__
+
+* [ESP32 IR Learn Send Example](examples/ir_learn/ir_learn_send)
+    - The example demonstrates how to use IR learn module to send IR message.
+    - Keywords: __IR learn RMT__
+
 * [ESP32 Smart Device to Cloud Framework](examples/smart_device)
     - It provides a framework for a ESP32 smart device (smart plug, smart light, etc) to connect and communicate with a cloud service.
     - Keywords: __SmartLight SmartPlug Alink Joylink__
@@ -117,6 +125,7 @@
 [ULP Monitor](./components/features/ulp_monitor) - Provides some APIs for running simple ulp program in deep sleep.<br>
 [TouchPad](./components/features/touchpad) - Driver and example of using different types of touch pad.<br>
 [Infrared](./components/features/infrared) - Driver and framework of using infrared remote control.<br>
+[Ir_learn](./components/features/ir_learn) - Driver and example of using infrared learn.<br>
 
 ### Framework
 
